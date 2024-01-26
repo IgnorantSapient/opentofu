@@ -23,7 +23,6 @@ on:
       - main
       - 'v[0-9]+.[0-9]+'
       - checks-workflow-dev/*
-      - run-tests-on-all-prs-gh-actions
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
 
@@ -45,8 +44,10 @@ jobs:
           - { runson: ubuntu-latest, goos: linux, goarch: "arm" }
           - { runson: ubuntu-latest, goos: linux, goarch: "arm64" }
           - { runson: macos-latest, goos: darwin, goarch: "amd64" }
-          - { runson: windows-latest, goos: windows, goarch: "amd64" }
-          - { runson: windows-latest, goos: windows, goarch: "386" }
+          # - { runson: windows-latest, goos: windows, goarch: "amd64" }
+          # - { runson: windows-latest, goos: windows, goarch: "386" }
+          # https://github.com/opentofu/opentofu/issues/1201 if fixed
+          #  ^ un-comment the two windows-latest lines
       fail-fast: false
     steps:
       - name: "Fetch source code"
