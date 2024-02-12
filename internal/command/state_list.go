@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package command
@@ -96,7 +98,7 @@ func (c *StateListCommand) Run(args []string) int {
 
 func (c *StateListCommand) Help() string {
 	helpText := `
-Usage: tofu [global options] state list [options] [address...]
+Usage: tofu [global options] state (list|ls) [options] [address...]
 
   List resources in the OpenTofu state.
 

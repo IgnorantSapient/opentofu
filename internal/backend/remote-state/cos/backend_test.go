@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package cos
@@ -210,7 +212,7 @@ func setupBackend(t *testing.T, bucket, prefix, key string, encrypt bool) backen
 	}
 
 	if os.Getenv(PROVIDER_REGION) == "" {
-		os.Setenv(PROVIDER_REGION, "ap-guangzhou")
+		t.Setenv(PROVIDER_REGION, "ap-guangzhou")
 	}
 
 	appId := os.Getenv("TF_COS_APPID")

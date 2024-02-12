@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package s3
@@ -45,14 +47,13 @@ var (
 
 // verify that we are doing ACC tests or the S3 tests specifically
 func testACC(t *testing.T) {
+	t.Helper()
 	skip := os.Getenv("TF_ACC") == "" && os.Getenv("TF_S3_TEST") == ""
 	if skip {
 		t.Log("s3 backend tests require setting TF_ACC or TF_S3_TEST")
 		t.Skip()
 	}
-	if os.Getenv("AWS_DEFAULT_REGION") == "" {
-		os.Setenv("AWS_DEFAULT_REGION", "us-west-2")
-	}
+	t.Setenv("AWS_DEFAULT_REGION", "us-west-2")
 }
 
 func TestBackend_impl(t *testing.T) {
@@ -177,13 +178,8 @@ func TestBackendConfig_RegionEnvVar(t *testing.T) {
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
 			for k, v := range tc.vars {
-				os.Setenv(k, v)
+				t.Setenv(k, v)
 			}
-			t.Cleanup(func() {
-				for k := range tc.vars {
-					os.Unsetenv(k)
-				}
-			})
 
 			b := backend.TestBackendConfig(t, New(), backend.TestWrapConfig(config)).(*Backend)
 
@@ -229,13 +225,8 @@ func TestBackendConfig_DynamoDBEndpoint(t *testing.T) {
 
 			if tc.vars != nil {
 				for k, v := range tc.vars {
-					os.Setenv(k, v)
+					t.Setenv(k, v)
 				}
-				t.Cleanup(func() {
-					for k := range tc.vars {
-						os.Unsetenv(k)
-					}
-				})
 			}
 
 			if tc.config != nil {
@@ -284,13 +275,8 @@ func TestBackendConfig_S3Endpoint(t *testing.T) {
 
 			if tc.vars != nil {
 				for k, v := range tc.vars {
-					os.Setenv(k, v)
+					t.Setenv(k, v)
 				}
-				t.Cleanup(func() {
-					for k := range tc.vars {
-						os.Unsetenv(k)
-					}
-				})
 			}
 
 			if tc.config != nil {
@@ -362,10 +348,7 @@ func TestBackendConfig_STSEndpoint(t *testing.T) {
 			defer closeSts()
 
 			if tc.setEnvVars {
-				os.Setenv("AWS_STS_ENDPOINT", endpoint)
-				t.Cleanup(func() {
-					os.Unsetenv("AWS_STS_ENDPOINT")
-				})
+				t.Setenv("AWS_STS_ENDPOINT", endpoint)
 			}
 
 			if tc.setConfig {
@@ -898,7 +881,7 @@ func TestBackendConfig_PrepareConfigWithEnvVars(t *testing.T) {
 			b := New()
 
 			for k, v := range tc.vars {
-				os.Setenv(k, v)
+				t.Setenv(k, v)
 			}
 
 			_, valDiags := b.PrepareConfig(populateSchema(t, b.ConfigSchema(), tc.config))
@@ -1235,10 +1218,7 @@ func TestBackendSSECustomerKeyEnvVar(t *testing.T) {
 				"region":  "us-west-1",
 			}
 
-			os.Setenv("AWS_SSE_CUSTOMER_KEY", testCase.customerKey)
-			t.Cleanup(func() {
-				os.Unsetenv("AWS_SSE_CUSTOMER_KEY")
-			})
+			t.Setenv("AWS_SSE_CUSTOMER_KEY", testCase.customerKey)
 
 			b := New().(*Backend)
 			diags := b.Configure(populateSchema(t, b.ConfigSchema(), hcl2shim.HCL2ValueFromConfigValue(config)))

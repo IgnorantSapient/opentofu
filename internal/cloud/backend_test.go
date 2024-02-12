@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package cloud
@@ -7,7 +9,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"testing"
 
@@ -328,13 +329,8 @@ func TestCloud_PrepareConfigWithEnvVars(t *testing.T) {
 			b := New(testDisco(s))
 
 			for k, v := range tc.vars {
-				os.Setenv(k, v)
+				t.Setenv(k, v)
 			}
-			t.Cleanup(func() {
-				for k := range tc.vars {
-					os.Unsetenv(k)
-				}
-			})
 
 			_, valDiags := b.PrepareConfig(tc.config)
 			if (valDiags.Err() == nil) != (tc.expectedErr == "") {
