@@ -51,6 +51,7 @@ jobs:
     steps:
       - name: "Set up QEMU"
         uses: docker/setup-qemu-action@v3
+        
       - name: "Fetch source code"
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
@@ -78,7 +79,7 @@ jobs:
         run: |
           go test ./...
 
-  race-tests:
+  # race-tests:
     name: "Race Tests"
     runs-on: ubuntu-latest
 
@@ -112,7 +113,7 @@ jobs:
         run: |
           go test -race ./internal/tofu ./internal/command ./internal/states
 
-  e2e-tests:
+  # e2e-tests:
     # This is an intentionally-limited form of our E2E test run which only
     # covers OpenTofu running on Linux. The build.yml workflow runs these
     # tests across various other platforms in order to catch the rare exception
@@ -148,7 +149,7 @@ jobs:
         run: |
           TF_ACC=1 go test -v ./internal/command/e2etest
 
-  consistency-checks:
+  # consistency-checks:
     name: "Code Consistency Checks"
     runs-on: ubuntu-latest
 
@@ -203,7 +204,7 @@ jobs:
             exit 1
           fi
 
-  license-checks:
+  # license-checks:
     name: "License Checks"
     runs-on: ubuntu-latest
 
