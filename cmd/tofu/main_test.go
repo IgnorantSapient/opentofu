@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package main
@@ -116,14 +118,9 @@ func TestMain_cliArgsFromEnv(t *testing.T) {
 
 	for i, tc := range cases {
 		t.Run(fmt.Sprintf("%d-%s", i, tc.Name), func(t *testing.T) {
-			os.Unsetenv(EnvCLI)
-			defer os.Unsetenv(EnvCLI)
-
 			// Set the env var value
 			if tc.Value != "" {
-				if err := os.Setenv(EnvCLI, tc.Value); err != nil {
-					t.Fatalf("err: %s", err)
-				}
+				t.Setenv(EnvCLI, tc.Value)
 			}
 
 			// Set up the args
@@ -223,14 +220,9 @@ func TestMain_cliArgsFromEnvAdvanced(t *testing.T) {
 				return testCommand, nil
 			}
 
-			os.Unsetenv(tc.EnvVar)
-			defer os.Unsetenv(tc.EnvVar)
-
 			// Set the env var value
 			if tc.Value != "" {
-				if err := os.Setenv(tc.EnvVar, tc.Value); err != nil {
-					t.Fatalf("err: %s", err)
-				}
+				t.Setenv(tc.EnvVar, tc.Value)
 			}
 
 			// Set up the args
@@ -274,8 +266,7 @@ func TestMain_autoComplete(t *testing.T) {
 		return &testCommandCLI{}, nil
 	}
 
-	os.Setenv("COMP_LINE", "tofu versio")
-	defer os.Unsetenv("COMP_LINE")
+	t.Setenv("COMP_LINE", "tofu versio")
 
 	// Run it!
 	os.Args = []string{"tofu", "tofu", "versio"}

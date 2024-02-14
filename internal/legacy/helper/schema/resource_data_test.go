@@ -1,11 +1,12 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package schema
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -2115,9 +2116,7 @@ func TestResourceDataSet(t *testing.T) {
 		},
 	}
 
-	oldEnv := os.Getenv(PanicOnErr)
-	os.Setenv(PanicOnErr, "")
-	defer os.Setenv(PanicOnErr, oldEnv)
+	t.Setenv(PanicOnErr, "")
 
 	for _, tc := range cases {
 		t.Run(tc.TestName, func(t *testing.T) {

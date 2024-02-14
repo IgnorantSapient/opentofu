@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package oss
@@ -20,6 +22,7 @@ import (
 
 // verify that we are doing ACC tests or the OSS tests specifically
 func testACC(t *testing.T) {
+	t.Helper()
 	skip := os.Getenv("TF_ACC") == "" && os.Getenv("TF_OSS_TEST") == ""
 	if skip {
 		t.Log("oss backend tests require setting TF_ACC or TF_OSS_TEST")
@@ -28,9 +31,7 @@ func testACC(t *testing.T) {
 	if skip {
 		t.Fatal("oss backend tests require setting ALICLOUD_ACCESS_KEY or ALICLOUD_ACCESS_KEY_ID")
 	}
-	if os.Getenv("ALICLOUD_REGION") == "" {
-		os.Setenv("ALICLOUD_REGION", "cn-beijing")
-	}
+	t.Setenv("ALICLOUD_REGION", "cn-beijing")
 }
 
 func TestBackend_impl(t *testing.T) {

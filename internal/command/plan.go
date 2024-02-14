@@ -1,4 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) The OpenTofu Authors
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) 2023 HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package command
@@ -273,6 +275,9 @@ Other Options:
   -lock-timeout=0s           Duration to retry a state lock.
 
   -no-color                  If specified, output won't contain any color.
+
+  -concise                   Displays plan output in a concise way, skipping the
+							 refreshing log lines.
 
   -out=path                  Write a plan file to the given path. This can be
                              used as input to the "apply" command.
