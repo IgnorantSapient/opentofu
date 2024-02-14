@@ -38,16 +38,25 @@ jobs:
     strategy:
       matrix:
         include:
+          - { runson: ubuntu-latest, goos: linux, goarch: "arm64" }
           - { runson: ubuntu-latest, goos: linux, goarch: "amd64" }
+          # - { runson: ubuntu-latest, goos: linux, goarch: "386" }
+          # - { runson: ubuntu-latest, goos: linux, goarch: "arm" }
+          # https://github.com/opentofu/opentofu/issues/1266 if fixed
+          # uncomment the above goarch 386 & arm lines
           - { runson: macos-latest, goos: darwin, goarch: "amd64" }
           # - { runson: windows-latest, goos: windows, goarch: "amd64" }
           # https://github.com/opentofu/opentofu/issues/1201 if fixed
-          #  ^ un-comment the two windows-latest lines
+          #  ^ un-comment the  windows-latest line
       fail-fast: false
     env:
       GOOS: ${{ matrix.goos }}
       GOARCH: ${{ matrix.goarch }}
     steps:
+      - name: "Set up QEMU"
+        if: matrix.goos == 'linux' && matrix.goarch != 'amd64'
+        uses: docker/setup-qemu-action@v3
+
       - name: "Fetch source code"
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
