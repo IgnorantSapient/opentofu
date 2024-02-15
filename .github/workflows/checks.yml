@@ -22,7 +22,6 @@ on:
       - main
       - 'v[0-9]+.[0-9]+'
       - checks-workflow-dev/*
-      - run-tests-on-386
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
 
@@ -52,6 +51,8 @@ jobs:
       GOOS: ${{ matrix.goos }}
       GOARCH: ${{ matrix.goarch }}
     steps:
+      # 👇🏾 GH actions supports only "AMD64 arch", so we are using this action
+      # for testing on non amd64 envs like 386, arm64 etc...
       - name: "Set up QEMU"
         if: matrix.goos == 'linux' && matrix.goarch != 'amd64'
         uses: docker/setup-qemu-action@v3
